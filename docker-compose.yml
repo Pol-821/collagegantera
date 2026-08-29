@@ -1,0 +1,32 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Backend/Dockerfile
+    container_name: collagegantera-api
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./data:/app/data
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__DefaultConnection=Data Source=/app/data/collagegantera.db
+      - Jwt__Issuer=CollaGeganteraAPI
+      - Jwt__Audience=CollaGeganteraApp
+      # Secrets: calen al host/.env. Sense valor per defecte: si falten, docker compose falla.
+      - Jwt__Key=${JWT_KEY:?Defineix JWT_KEY al .env o al host}
+      - CollaCode=${COLLA_CODE:?Defineix COLLA_CODE al .env o al host}
+      - EmailSettings__SmtpServer=${SMTP_HOST:-smtp.gmail.com}
+      - EmailSettings__SmtpPort=${SMTP_PORT:-587}
+      - EmailSettings__SenderEmail=${SMTP_USERNAME:?Defineix SMTP_USERNAME al .env o al host}
+      - EmailSettings__SenderName=${SMTP_SENDER_NAME:-Colla Gegantera}
+      - EmailSettings__SenderPassword=${SMTP_PASSWORD:?Defineix SMTP_PASSWORD al .env o al host}
+      - Vapid__PublicKey=${VAPID_PUBLIC_KEY:?Defineix VAPID_PUBLIC_KEY al .env o al host}
+      - Vapid__PrivateKey=${VAPID_PRIVATE_KEY:?Defineix VAPID_PRIVATE_KEY al .env o al host}
+      - Vapid__Subject=${VAPID_SUBJECT:-mailto:colla@gegantera.app}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/swagger/index.html"]
+      interval: 30s
+      timeout: 10s
+      retries: 3

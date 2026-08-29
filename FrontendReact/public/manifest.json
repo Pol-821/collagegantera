@@ -1,0 +1,17 @@
+{
+  "name": "Colla Gegantera",
+  "short_name": "CollaGegantera",
+  "description": "Aplicació de gestió de la Colla Gegantera",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#e63946",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
